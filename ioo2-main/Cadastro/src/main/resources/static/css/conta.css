@@ -1,0 +1,179 @@
+.account-container {
+  max-width: 600px;
+  padding: 30px;
+}
+
+.account-info {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.profile-picture {
+  width: 100% !important; 
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-picture img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 2px solid var(--orange);
+}
+
+.change-photo-btn {
+  background-color: transparent;
+  color: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.change-photo-btn:hover {
+  background-color: var(--orange);
+  color: var(--bg-color);
+}
+
+.user-details p {
+  margin-bottom: 8px;
+}
+
+.account-actions h3 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.action-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  background-color: transparent;
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.action-btn:hover {
+  background-color: var(--orange);
+  color: var(--bg-color);
+}
+
+.delete-btn {
+  border-color: red;
+  color: red;
+}
+
+.delete-btn:hover {
+  background-color: red;
+  color: var(--bg-color);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  margin: auto;
+  padding: 30px;
+  border: 1px solid #888;
+  border-radius: 15px;
+  width: 90%;
+  border-radius: 10px;
+  position: relative;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal input[type=password] {
+    width: 100%; /* Ajustado */
+    padding: 10px;
+    border: 1px solid #888; /* Borda mais escura para contraste */
+    background-color: #ffffff; /* ALTERADO PARA BRANCO */
+    color: #1a1a1a; /* ALTERADO PARA PRETO */
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding-right: 40px; /* Espaço para o ícone */
+  }
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.cancel-btn {
+  background-color: transparent;
+  color: #888;
+  border-color: #888;
+}
+
+.cancel-btn:hover {
+  background-color: #888;
+  color: var(--bg-color);
+}
+
+.save-btn {
+  background-color: green;
+  color: var(--bg-color);
+  border-color: green;
+}
+
+.confirm-delete-btn {
+  background-color: red;
+  color: var(--bg-color);
+  border-color: red;
+}
+
+.password-container {
+    position: relative;
+    margin-bottom: 15px; /* Para manter o espaçamento */
+}
+
+  /* Estilo para o ícone de toggle de senha */
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%; /* Centraliza verticalmente */
+    transform: translateY(-50%); /* Ajusta para a altura real do elemento */
+    cursor: pointer;
+    color: #aaa;
+    font-size: 1.2em;
+    line-height: 1; /* Garante que a altura da linha não afete o alinhamento */
+}

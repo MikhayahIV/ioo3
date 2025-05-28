@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login/Cadastro</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+<div class="theme-toggle">
+  <label for="themeSwitcher">Tema:</label>
+  <button id="themeSwitcher">Alternar Tema</button>
+</div>
+
+<div class="container" id="auth-container">
+  <div id="login-form">
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" />
+
+    <div class="password-container">
+      <input type="password" id="loginSenha" placeholder="Senha" />
+      <span class="toggle-password" data-target="loginSenha">👁️</span>
+    </div>
+
+    <button onclick="login()">Entrar</button>
+    <p id="loginError" class="error-message"></p>
+    <p>Não tem uma conta? <a href="#" onclick="toggleForms()">Cadastre-se</a></p>
+  </div>
+
+  <div id="register-form" style="display: none;">
+    <h2>Cadastro</h2>
+    <input type="text" id="regNome" placeholder="Nome" />
+    <p id="regNomeError" class="error-message"></p>
+    <input type="text" id="regSobrenome" placeholder="Sobrenome" />
+    <p id="regSobrenomeError" class="error-message"></p>
+    <input type="email" id="regEmail" placeholder="Email" />
+    <p id="regEmailError" class="error-message"></p>
+
+
+    <div class="password-container">
+      <input type="password" id="regSenha" placeholder="Senha" />
+      <span class="toggle-password" data-target="regSenha">👁️</span>
+    </div>
+    <p id="regSenhaError" class="error-message"></p>
+
+    <div class="password-container">
+      <input type="password" id="regSenhaConfirm" placeholder="Repita a Senha" />
+      <span class="toggle-password" data-target="regSenhaConfirm">👁️</span>
+    </div>
+    <p id="regSenhaConfirmError" class="error-message"></p>
+
+    <input type="text" id="regTelefone" placeholder="Telefone" />
+    <p id="regTelefoneError" class="error-message"></p>
+    <input type="text" id="regEndereco" placeholder="Endereço" />
+    <p id="regEnderecoError" class="error-message"></p>
+    <input type="date" id="regNascimento" />
+    <p id="regNascimentoError" class="error-message"></p>
+
+    <select id="regGenero">
+      <option value="MASCULINO">Masculino</option>
+      <option value="FEMININO">Feminino</option>
+      <option value="NAO_BINARIO">Não Binário</option> <option value="OUTRO">Outro</option>
+      <option value="PREFIRO_NAO_DIZER">Prefiro não dizer</option> </select>
+    <p id="regGeneroError" class="error-message"></p>
+
+    <button onclick="register()">Cadastrar</button>
+    <p id="registerError" class="error"></p>
+    <p>Já tem uma conta? <a href="#" onclick="toggleForms()">Login</a></p>
+  </div>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+.admin-dashboard {
+    background-color: var(--card-bg-color); /* Branco suave para o fundo do painel */
+    padding: 25px;
+    border-radius: 12px; /* Bordas mais arredondadas */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombra mais suave */
+    margin-top: 20px;
+    border: 1px solid #ddd; /* Borda sutil */
+}
+
+.user-list-container {
+    margin-top: 25px;
+    overflow-x: auto;
+}
+
+#userTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#userTable th, #userTable td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+#userTable th {
+    background-color: var(--secondary-bg-color);
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+#userTable tbody tr:nth-child(even) {
+    background-color: var(--secondary-bg-color);
+}
+
+#userTable tbody tr:hover {
+    background-color: var(--hover-bg-color);
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    border-radius: 6px; /* Bordas arredondadas para botões */
+}
+
+.ml-2 {
+    margin-left: 10px;
+}
+
+/* Estilos para botões */
+.btn-primary, .btn-edit-user {
+    background-color: #ff9800; /* Laranja para botões */
+    border: 1px solid #ff9800;
+    color: #fff;
+    transition: background-color 0.3s ease; /* Transição suave */
+}
+
+.btn-primary:hover, .btn-edit-user:hover {
+    background-color: #f57c00; /* Laranja mais escuro no hover */
+    border-color: #f57c00;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+/* Estilos para o Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fundo semi-transparente mais suave */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #ff9800; /* Fundo branco para o conteúdo do modal */
+    margin: auto;
+    padding: 30px; /* Mais espaço interno */
+    border-radius: 15px; /* Bordas mais arredondadas para o modal */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Sombra mais pronunciada */
+    width: 95%;
+    max-width: 700px; /* Modal um pouco maior */
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+    color: #333; /* Texto mais escuro para melhor contraste */
+}
+
+.close-button {
+    color: #555;
+    float: right;
+    font-size: 30px; /* Ícone de fechar maior */
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #222;
+    text-decoration: none;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px; /* Mais espaço abaixo do título */
+    color: #333;
+    text-align: center;
+    font-size: 1.8em; /* Título maior */
+}
+
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500; /* Peso da fonte um pouco mais leve */
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"],
+.modal-content input[type="date"],
+.modal-content select {
+    width: calc(100% - 20px);
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 1em;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+    outline: none;
+    border-color: #ff9800; /* Laranja no foco */
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2); /* Sombra laranja no foco */
+}
+
+.modal-content .btn {
+    width: 100%;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 25px;
+    transition: background-color 0.2s ease;
+}
+
+.modal-content .btn-primary {
+    background-color: #ff9800; /* Laranja para o botão primário do modal */
+    color: white;
+}
+
+.modal-content .btn-primary:hover {
+    background-color: #f57c00;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.9em;
+    margin-top: 8px;
+}
+
+/* Animação de fade-in para o modal */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}

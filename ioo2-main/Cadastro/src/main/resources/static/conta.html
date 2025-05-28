@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Conta</title>
+  <link rel="stylesheet" href="/css/styles.css"> <link rel="stylesheet" href="/css/conta.css"> </head>
+<body>
+<div class="container" id="account-container">
+  <h1>Minha Conta</h1>
+
+  <div class="theme-toggle">
+    <label for="themeSwitcher">Tema:</label>
+    <button id="themeSwitcher">Alternar Tema</button>
+  </div>
+
+  <div class="profile-info">
+    <div class="profile-picture-container">
+      <img id="profilePhoto" src="https://placehold.co/120x120/aabbcc/ffffff?text=Foto" alt="Foto do Perfil" class="profile-picture"/>
+      <input type="file" id="profilePictureInput" accept="image/*" style="display: none;"/>
+      <button id="changePhotoButton" class="action-button">Alterar Foto</button>
+    </div>
+
+    <p>Nome: <span id="userName">Carregando...</span></p>
+    <p>Sobrenome: <span id="userSobrenome">Carregando...</span></p>
+    <p>Email: <span id="userEmail">Carregando...</span></p>
+    <p>Telefone: <span id="userTelefone">Carregando...</span></p>
+    <p>Endereço: <span id="userEndereco">Carregando...</span></p>
+    <p>Data de Nascimento: <span id="userDataNascimento">Carregando...</span></p>
+    <p>Gênero: <span id="userGenero">Carregando...</span></p>
+  </div>
+
+  <div class="actions">
+    <h2>Ações</h2>
+    <button id="editProfileButton" class="action-button primary">Editar Perfil</button>
+    <button id="changePasswordButton" class="action-button primary">Alterar Senha</button>
+    <button id="deleteAccountButton" class="action-button danger">Deletar Conta</button>
+    <button id="logoutButton" class="action-button secondary">Sair</button>
+  </div>
+</div>
+
+<div id="passwordModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h2>Alterar Senha</h2>
+    <form id="changePasswordForm">
+      <label for="currentPassword">Senha Atual:</label>
+      <div class="password-container">
+        <input type="password" id="currentPassword" required />
+        <span class="toggle-password" data-target="currentPassword">👁️</span>
+      </div>
+      <p id="currentPasswordError" class="error-message"></p> <label for="newPassword">Nova Senha:</label>
+      <div class="password-container">
+        <input type="password" id="newPassword" required />
+        <span class="toggle-password" data-target="newPassword">👁️</span>
+      </div>
+      <p id="newPasswordError" class="error-message"></p> <label for="confirmNewPassword">Confirmar Nova Senha:</label>
+      <div class="password-container">
+        <input type="password" id="confirmNewPassword" required />
+        <span class="toggle-password" data-target="confirmNewPassword">👁️</span>
+      </div>
+      <p id="confirmNewPasswordError" class="error-message"></p>
+      <button type="submit" class="action-button">Confirmar Alteração</button>
+      <p id="passwordChangeError" class="error-message"></p> </form>
+  </div>
+</div>
+
+<div id="editProfileModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button edit-profile-close-button">&times;</span>
+    <h2>Editar Perfil</h2>
+    <form id="editProfileForm">
+      <label for="editNome">Nome:</label>
+      <input type="text" id="editNome" />
+
+      <label for="editSobrenome">Sobrenome:</label>
+      <input type="text" id="editSobrenome" />
+
+      <label for="editEmail">Email:</label>
+      <input type="email" id="editEmail" />
+
+      <label for="editTelefone">Telefone:</label>
+      <input type="text" id="editTelefone" />
+
+      <label for="editEndereco">Endereço:</label>
+      <input type="text" id="editEndereco" />
+
+      <label for="editDataNascimento">Data de Nascimento:</label>
+      <input type="date" id="editDataNascimento" />
+
+      <label for="editGenero">Gênero:</label>
+      <select id="editGenero">
+        <option value="MASCULINO">Masculino</option>
+        <option value="FEMININO">Feminino</option>
+        <option value="NAO_BINARIO">Não Binário</option>
+        <option value="OUTRO">Outro</option>
+        <option value="PREFIRO_NAO_DIZER">Prefiro não dizer</option>
+      </select>
+
+      <button type="submit" class="action-button">Salvar Alterações</button>
+      <p id="profileEditError" class="error-message"></p>
+    </form>
+  </div>
+</div>
+
+
+<script src="js/conta.js"></script>
+<script src="js/util.js"></script>
+</body>
+</html>

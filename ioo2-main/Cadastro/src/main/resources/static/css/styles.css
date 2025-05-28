@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+:root {
+  --orange: #f57c00;
+  --bg-light: #fff;
+  --text-light: #000;
+  --bg-dark: #121212;
+  --text-dark: #fff;
+}
+
+body.light {
+  --bg-color: var(--bg-light);
+  --text-color: var(--text-light);
+}
+
+body.dark {
+  --bg-color: var(--bg-dark);
+  --text-color: var(--text-dark);
+}
+
+.container {
+  max-width: 400px;
+  margin: 50px auto;
+  background: var(--bg-color);
+  padding: 20px;
+  border: 2px solid var(--orange);
+  border-radius: 10px;
+  box-shadow: 0 0 10px var(--orange);
+
+}
+
+input, select, button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--orange);
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input:not([type="password"]),
+select {
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: var(--orange);
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.password-container {
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+  width: 100%;
+  padding-right: 40px;
+  margin-bottom: 0;
+}
+
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  user-select: none;
+
+}
+
+
+.toggle-password.visible {
+  color: var(--orange); 
+}
+
+button.danger {
+  background-color: #cc0000;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  text-align: bottom
+}
