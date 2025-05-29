@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   const token = localStorage.getItem("jwtToken");
-  const userId = localStorage.getItem("userId");
+  let userId = localStorage.getItem("userId");
   const userRole = localStorage.getItem("userRole"); // User role adicionado aqui!
 
 console.log("Variáveis do localStorage no conta.js:");
@@ -361,17 +361,6 @@ if (editProfileForm) {
         genero: newGenero
       };
 
-      // REMOVIDO: A linha que deletava campos vazios.
-      // Agora, campos vazios (strings vazias) serão enviados para o backend
-      // para que as validações @NotBlank e @NotNull possam ser acionadas.
-      /*
-      Object.keys(updatedData).forEach(key => {
-        if (updatedData[key] === '' || updatedData[key] === undefined) {
-          delete updatedData[key];
-        }
-      });
-      */
-
       try {
           const response = await fetch(`http://localhost:8080/api/usuarios/${userId}`, {
               method: "PUT",
@@ -382,15 +371,44 @@ if (editProfileForm) {
               body: JSON.stringify(updatedData)
           });
 
-          if (response.ok) {
-              const updatedUserData = await response.json();
-              alert("Perfil atualizado com sucesso!");
-              closeEditProfileModal();
-              fetchUserData(); // Re-carrega os dados na página principal
+           if (response.ok) {
+                   const responseData = await response.json(); // Isso agora é PerfilAtualizadoResponse
+                   const updatedUser = responseData.usuario; // Os dados atualizados do usuário
+                   const newToken = responseData.token; // O NOVO token JWT
+
+                      // 1. ATUALIZAR O LOCALSTORAGE COM O NOVO TOKEN
+                   localStorage.setItem('jwtToken', newToken);
+
+                      // 2. ATUALIZAR AS VARIÁVEIS GLOBAIS/MODULARES NO JAVASCRIPT
+                      // Se o email foi alterado, o ID do usuário não muda, mas se o token foi
+                      // gerado com base no email, o token precisa ser substituído.
+                      // A variável 'token' global também deve ser atualizada para futuras chamadas
+                   token = newToken; // Importante para que futuras chamadas usem o novo token
+                      // userId = updatedUser.id; // Raramente o ID muda, então esta linha geralmente não é necessária
+                      // userRole = updatedUser.role; // Atualize a role se ela puder mudar via este endpoint
+
+                   alert("Perfil atualizado com sucesso!"); // A mensagem de sucesso do próprio fluxo
+                   closeEditProfileModal();
+
+                      // 3. RECARRERGAR OS DADOS NA INTERFACE DO USUÁRIO
+                      // fetchUserData() vai agora usar o NOVO token e o userId correto
+                   fetchUserData(); // Esta função vai recarregar os dados na tela
+
           } else {
+                      // ... lógica de erro se a atualização falhar ...
               const errorData = await response.json().catch(() => ({ message: "Erro desconhecido ao atualizar perfil." }));
               console.error("Erro ao atualizar perfil:", response.status, errorData);
-              displayFormErrors(errorData, 'editProfileForm');
+              isplayFormErrors(errorData, 'editProfileForm');
+
+                      // Se o erro foi 401 ou 403 na TENTATIVA DE ATUALIZAÇÃO,
+                      // então a sessão REALMENTE expirou/não tem permissão, e aí sim você desloga.
+                  if (response.status === 401 || response.status === 403) {
+                       let("Sua sessão expirou ou você não tem permissão para atualizar o perfil. Faça login novamente.");
+                       localStorage.removeItem("jwtToken");
+                       localStorage.removeItem("userId");
+                       localStorage.removeItem("userRole");
+                       window.location.href = "index.html";
+                  }
           }
       } catch (error) {
           console.error("Erro de conexão ao atualizar perfil:", error);

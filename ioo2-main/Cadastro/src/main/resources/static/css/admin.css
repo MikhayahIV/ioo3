@@ -89,7 +89,7 @@
 }
 
 .modal-content {
-    background-color: #ff9800; /* Fundo branco para o conteúdo do modal */
+    background-color: #ff9800; /* Fundo laranja para o conteúdo do modal */
     margin: auto;
     padding: 30px; /* Mais espaço interno */
     border-radius: 15px; /* Bordas mais arredondadas para o modal */
@@ -184,4 +184,37 @@
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-30px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos para o container do input de senha e o ícone */
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo para o input de senha dentro do container */
+.password-input-container input {
+    flex-grow: 1;
+    padding: 12px 35px 12px 12px; /* Adicionado padding-right para espaço do ícone */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    color: #333;
+    font-size: 1em;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%; /* Posiciona o ícone no meio vertical do container */
+    transform: translateY(-50%); /* Centraliza o ícone verticalmente */
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #888;
+    user-select: none;
+}
+
+.toggle-password:hover {
+    color: #555;
 }

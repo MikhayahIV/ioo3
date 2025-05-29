@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const userId = localStorage.getItem("userId");
     let userRole = localStorage.getItem("userRole"); // Pode vir como "ROLE_ADMIN"
 
+ setupPasswordToggle();
     // Processa a role para remover o prefixo se existir
     if (userRole && userRole.startsWith('ROLE_')) {
         userRole = userRole.substring(5); // Remove "ROLE_"

@@ -34,10 +34,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Corrigido para a sintaxe mais recente do Spring Security 6+
                 .authorizeHttpRequests(auth -> auth
                         // Permite acesso público para o login e registro (APIs)
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // Permite acesso público ao endpoint de verificação de email
+                        .requestMatchers("/api/usuarios/check-email").permitAll()
 
                         // Permite acesso às páginas HTML e recursos estáticos
                         .requestMatchers(
@@ -49,6 +52,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN") // OU .hasAuthority("ROLE_ADMIN") dependendo do seu setup
 
                         // Usuários e admins podem acessar as APIs de usuários
+                        // Isso significa que qualquer usuário autenticado (ROLE_USER ou ROLE_ADMIN) pode acessar /api/usuarios/**
+                        // A lógica de "usuário só acessa seus próprios dados" vs "admin acessa tudo" deve ser feita no Controller/Service.
                         .requestMatchers("/api/usuarios/**").hasAnyRole("USER", "ADMIN") // OU .hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
                         // Todas as outras requisições requerem autenticação
@@ -56,7 +61,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Seu JWTFilter aqui
-        // .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler)) // Se tiver
+        // .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler)) // Se tiver um handler de exceção
         return http.build();
     }
 
