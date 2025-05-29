@@ -22,15 +22,13 @@ public class JWTUtil {
 
 
     @Value("${jwt.secret}")
-    private String secretString; // Nome para a string bruta da chave
+    private String secretString;
 
     @Value("${jwt.expiration}")
-    private long expirationTime; // Nome mais claro para o tempo de expiração
+    private long expirationTime;
 
-    // 2. A chave secreta real, inicializada uma única vez
     private SecretKey signingKey;
 
-    // 3. Método para inicializar a chave após a injeção das propriedades
     @PostConstruct
     public void init() {
         this.signingKey = Keys.hmacShaKeyFor(secretString.getBytes(StandardCharsets.UTF_8));
@@ -42,15 +40,15 @@ public class JWTUtil {
                 .claim("userId", userId)
                 .claim("role", userRole)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // Use expirationTime
-                .signWith(signingKey, SignatureAlgorithm.HS512) // <--- Corrigido: Usando a SecretKey inicializada
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) //
+                .signWith(signingKey, SignatureAlgorithm.HS512) //
                 .compact();
     }
 
     // Método auxiliar para extrair todas as claims (reutilizado)
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(signingKey) // <--- Usando a SecretKey inicializada
+                .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -62,15 +60,14 @@ public class JWTUtil {
 
 
     public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject(); // Reutiliza extractAllClaims
+        return extractAllClaims(token).getSubject();
     }
 
     public boolean isValid(String token) {
         try {
-            extractAllClaims(token); // Tenta extrair as claims, se der erro, captura a exceção
+            extractAllClaims(token);
             return true;
         } catch (JwtException e) {
-            // Logar a exceção para depuração seria uma boa prática aqui
             System.err.println("Token inválido ou expirado: " + e.getMessage());
             return false;
         }
@@ -78,7 +75,6 @@ public class JWTUtil {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        // Verificar se o token não está expirado também
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

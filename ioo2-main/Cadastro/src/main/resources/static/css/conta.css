@@ -121,14 +121,14 @@
 }
 
 .modal input[type=password] {
-    width: 100%; /* Ajustado */
+    width: 100%;
     padding: 10px;
-    border: 1px solid #888; /* Borda mais escura para contraste */
-    background-color: #ffffff; /* ALTERADO PARA BRANCO */
-    color: #1a1a1a; /* ALTERADO PARA PRETO */
+    border: 1px solid #888;
+    background-color: #ffffff;
+    color: #1a1a1a;
     border-radius: 5px;
     box-sizing: border-box;
-    padding-right: 40px; /* Espaço para o ícone */
+    padding-right: 40px;
   }
 
 .modal-buttons {
@@ -163,17 +163,17 @@
 
 .password-container {
     position: relative;
-    margin-bottom: 15px; /* Para manter o espaçamento */
+    margin-bottom: 15px;
 }
 
-  /* Estilo para o ícone de toggle de senha */
+
 .toggle-password {
     position: absolute;
     right: 10px;
-    top: 50%; /* Centraliza verticalmente */
-    transform: translateY(-50%); /* Ajusta para a altura real do elemento */
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
     color: #aaa;
     font-size: 1.2em;
-    line-height: 1; /* Garante que a altura da linha não afete o alinhamento */
+    line-height: 1;
 }

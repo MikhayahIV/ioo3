@@ -47,19 +47,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // NOVO HANDLER: Para capturar RuntimeExceptions específicas como "Email ou senha inválidos"
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST.value()); // Retorna 400 Bad Request
+        body.put("status", HttpStatus.BAD_REQUEST.value());
         body.put("error", "Bad Request");
-        body.put("message", ex.getMessage()); // A mensagem da exceção diretamente no campo 'message'
+        body.put("message", ex.getMessage());
         body.put("path", request.getDescription(false).substring(4));
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // O handler genérico para Exception.class deve vir DEPOIS dos handlers mais específicos
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAllOtherExceptions(Exception ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();

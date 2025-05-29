@@ -45,14 +45,11 @@ public class AuthController {
     public ResponseEntity<?> registrar(@RequestBody @Valid UsuarioCadastroDTO dto) {
         try {
             UsuarioResponseDTO responseDTO = authService.registrar(dto);
-            // Retorna 201 Created em caso de sucesso no registro
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (IllegalArgumentException e) {
-            // Exemplo: se o AuthService lançar IllegalArgumentException para "email já registrado"
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), "Bad Request", Instant.now()));
         } catch (RuntimeException e) {
-            // Captura qualquer outra RuntimeException não específica
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponseDTO("Ocorreu um erro interno ao registrar: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error", Instant.now()));
         }
@@ -63,7 +60,7 @@ public class AuthController {
         try {
             UsuarioResponseDTO responseDTO = authService.login(dto);
             return ResponseEntity.ok(responseDTO);
-        } catch (RuntimeException e) { // Idealmente, você teria uma exceção específica para credenciais inválidas
+        } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED) // Status 401 Unauthorized
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.UNAUTHORIZED.value(), "Unauthorized", Instant.now()));
         }

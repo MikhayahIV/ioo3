@@ -1,10 +1,10 @@
 .admin-dashboard {
-    background-color: var(--card-bg-color); /* Branco suave para o fundo do painel */
+    background-color: var(--card-bg-color);
     padding: 25px;
-    border-radius: 12px; /* Bordas mais arredondadas */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Sombra mais suave */
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     margin-top: 20px;
-    border: 1px solid #ddd; /* Borda sutil */
+    border: 1px solid #ddd;
 }
 
 .user-list-container {
@@ -42,23 +42,23 @@
 .btn-sm {
     padding: 8px 16px;
     font-size: 0.9em;
-    border-radius: 6px; /* Bordas arredondadas para botões */
+    border-radius: 6px;
 }
 
 .ml-2 {
     margin-left: 10px;
 }
 
-/* Estilos para botões */
+
 .btn-primary, .btn-edit-user {
-    background-color: #ff9800; /* Laranja para botões */
+    background-color: #ff9800;
     border: 1px solid #ff9800;
     color: #fff;
-    transition: background-color 0.3s ease; /* Transição suave */
+    transition: background-color 0.3s ease;
 }
 
 .btn-primary:hover, .btn-edit-user:hover {
-    background-color: #f57c00; /* Laranja mais escuro no hover */
+    background-color: #f57c00;
     border-color: #f57c00;
 }
 
@@ -73,7 +73,7 @@
     border-color: #c82333;
 }
 
-/* Estilos para o Modal */
+
 .modal {
     display: none;
     position: fixed;
@@ -83,28 +83,28 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4); /* Fundo semi-transparente mais suave */
+    background-color: rgba(0,0,0,0.4);
     justify-content: center;
     align-items: center;
 }
 
 .modal-content {
-    background-color: #ff9800; /* Fundo laranja para o conteúdo do modal */
+    background-color: #ff9800;
     margin: auto;
-    padding: 30px; /* Mais espaço interno */
-    border-radius: 15px; /* Bordas mais arredondadas para o modal */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2); /* Sombra mais pronunciada */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     width: 95%;
-    max-width: 700px; /* Modal um pouco maior */
+    max-width: 700px;
     position: relative;
     animation: fadeIn 0.3s ease-out;
-    color: #333; /* Texto mais escuro para melhor contraste */
+    color: #333;
 }
 
 .close-button {
     color: #555;
     float: right;
-    font-size: 30px; /* Ícone de fechar maior */
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -117,10 +117,10 @@
 
 .modal-content h2 {
     margin-top: 0;
-    margin-bottom: 25px; /* Mais espaço abaixo do título */
+    margin-bottom: 25px;
     color: #333;
     text-align: center;
-    font-size: 1.8em; /* Título maior */
+    font-size: 1.8em;
 }
 
 .modal-content .form-group {
@@ -130,7 +130,7 @@
 .modal-content label {
     display: block;
     margin-bottom: 8px;
-    font-weight: 500; /* Peso da fonte um pouco mais leve */
+    font-weight: 500;
 }
 
 .modal-content input[type="text"],
@@ -150,8 +150,8 @@
 .modal-content input:focus,
 .modal-content select:focus {
     outline: none;
-    border-color: #ff9800; /* Laranja no foco */
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2); /* Sombra laranja no foco */
+    border-color: #ff9800;
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
 }
 
 .modal-content .btn {
@@ -166,7 +166,7 @@
 }
 
 .modal-content .btn-primary {
-    background-color: #ff9800; /* Laranja para o botão primário do modal */
+    background-color: #ff9800;
     color: white;
 }
 
@@ -180,23 +180,22 @@
     margin-top: 8px;
 }
 
-/* Animação de fade-in para o modal */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilos para o container do input de senha e o ícone */
+
 .password-input-container {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-/* Estilo para o input de senha dentro do container */
+
 .password-input-container input {
     flex-grow: 1;
-    padding: 12px 35px 12px 12px; /* Adicionado padding-right para espaço do ícone */
+    padding: 12px 35px 12px 12px;
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: #f8f8f8;
@@ -207,8 +206,8 @@
 .toggle-password {
     position: absolute;
     right: 10px;
-    top: 50%; /* Posiciona o ícone no meio vertical do container */
-    transform: translateY(-50%); /* Centraliza o ícone verticalmente */
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
     font-size: 1.2em;
     color: #888;

@@ -45,8 +45,8 @@ function clearAuthData() {
     localStorage.removeItem('userRole');
 }
 
-// A função makeAuthenticatedRequest
-async function makeAuthenticatedRequest(url, method = 'GET', body = null, isFormData = false) { // Adiciona isFormData
+
+async function makeAuthenticatedRequest(url, method = 'GET', body = null, isFormData = false) {
     const token = getJwtToken();
 
     if (!token) {
@@ -60,7 +60,7 @@ async function makeAuthenticatedRequest(url, method = 'GET', body = null, isForm
         'Authorization': `Bearer ${token}`
     };
 
-    if (!isFormData) { // Apenas adiciona Content-Type se NÃO for FormData
+    if (!isFormData) {
         headers['Content-Type'] = 'application/json';
     }
 
@@ -70,7 +70,7 @@ async function makeAuthenticatedRequest(url, method = 'GET', body = null, isForm
     };
 
     if (body) {
-        options.body = isFormData ? body : JSON.stringify(body); // Envia o corpo como FormData ou JSON string
+        options.body = isFormData ? body : JSON.stringify(body);
     }
 
     const response = await fetch(url, options);
@@ -88,7 +88,7 @@ async function makeAuthenticatedRequest(url, method = 'GET', body = null, isForm
         throw new Error(errorData.message || `Erro na requisição: ${response.status}`);
     }
 
-    // Retorna a resposta como texto para upload de imagem, já que o backend pode retornar uma URL simples
+
     if (url.includes('/foto') && method === 'POST') {
         return response.text();
     }

@@ -63,9 +63,9 @@ public class AuthService {
         UsuariosModel salvo = repository.save(user);
 
         String token = tokenService.generateToken(
-                salvo.getEmail(), // <--- AGORA ESTÁ CERTO! O EMAIL VAI PARA O 'subject'
+                salvo.getEmail(),
                 salvo.getId(),
-                salvo.getRole().name() // Lembre-se de passar a role como String
+                salvo.getRole().name()
         );
 
         return new UsuarioResponseDTO(

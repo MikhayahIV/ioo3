@@ -51,7 +51,6 @@ public class UsuarioService {
         UsuariosModel usuario = repository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        // Atualiza apenas os campos que não são nulos no DTO de requisição
         if (updateRequest.nome() != null && !updateRequest.nome().isEmpty()) {
             usuario.setNome(updateRequest.nome());
         }
@@ -59,7 +58,6 @@ public class UsuarioService {
             usuario.setSobrenome(updateRequest.sobrenome());
         }
         if (updateRequest.email() != null && !updateRequest.email().isEmpty()) {
-            // Opcional: Adicionar validação para email duplicado aqui, se o email for alterado
             if (repository.findByEmail(updateRequest.email()).isPresent() &&
                     !repository.findByEmail(updateRequest.email()).get().getId().equals(userId)) {
                 throw new RuntimeException("Email já cadastrado para outro usuário.");
@@ -78,27 +76,23 @@ public class UsuarioService {
         if (updateRequest.genero() != null ) {
             usuario.setGenero(updateRequest.genero());
         }
-        // Foto não está no DTO de atualização neste exemplo, mas você pode adicionar
 
         UsuariosModel updatedUser = repository.save(usuario);
-        return toDTO(updatedUser); // Retorna o DTO do usuário atualizado
+        return toDTO(updatedUser);
     }
 
     public void changeUserPassword(Long userId, String currentPassword, String newPassword) {
         UsuariosModel usuario = repository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        // 1. Verifica se a senha atual fornecida corresponde à senha armazenada (codificada)
         if (!passwordEncoder.matches(currentPassword, usuario.getSenha())) {
             throw new RuntimeException("Senha atual incorreta.");
         }
 
-        // 2. Codifica a nova senha
         String encodedNewPassword = passwordEncoder.encode(newPassword);
 
-        // 3. Atualiza a senha do usuário
         usuario.setSenha(encodedNewPassword);
-        repository.save(usuario); // Salva o usuário com a nova senha
+        repository.save(usuario);
     }
 
     public void deleteUser(Long userId) {
@@ -117,13 +111,11 @@ public class UsuarioService {
         }
 
         try {
-            // Cria o diretório de upload se não existir
             Path uploadPath = Paths.get(UPLOAD_DIR);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // Gera um nome de arquivo único para evitar colisões
             String originalFilename = file.getOriginalFilename();
             String fileExtension = "";
             if (originalFilename != null && originalFilename.contains(".")) {
@@ -132,14 +124,10 @@ public class UsuarioService {
             String uniqueFileName = UUID.randomUUID().toString() + fileExtension;
             Path filePath = uploadPath.resolve(uniqueFileName);
 
-            // Salva o arquivo no sistema de arquivos
             Files.copy(file.getInputStream(), filePath);
 
-            // Constrói a URL acessível publicamente
-            // Assumindo que /static/uploads/ é mapeado para UPLOAD_DIR
             String imageUrl = "/uploads/" + uniqueFileName;
 
-            // Atualiza a URL da foto no usuário e salva no banco de dados
             usuario.setFoto(imageUrl);
             repository.save(usuario);
 

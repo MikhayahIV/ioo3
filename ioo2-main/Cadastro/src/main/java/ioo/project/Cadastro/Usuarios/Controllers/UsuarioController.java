@@ -34,19 +34,9 @@ public class UsuarioController {
 
     private UsuariosRepository repository;
 
-    /*
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable Long id){
-        return ResponseEntity.ok(service.getById(id));
-    }*/
-
-
     @PutMapping("/{id}/senha")
     @PreAuthorize("#id == authentication.principal.id")
-    // Adicionado @Valid para ativar as validações do DTO
     public ResponseEntity<String> changePassword(@PathVariable Long id, @RequestBody @Valid SenhaUpdateDTO request) {
-        // A lógica de validação de senha atual incorreta ainda será tratada no serviço,
-        // mas as validações de formato e preenchimento da nova senha serão tratadas aqui.
         service.changeUserPassword(id, request.senhaAtual(), request.novaSenha());
         return ResponseEntity.ok("Senha alterada com sucesso!");
     }
@@ -58,7 +48,6 @@ public class UsuarioController {
             UsuarioResponseDTO updatedUser = service.updateUserProfile(id, request);
             return ResponseEntity.ok(updatedUser);
         } catch (IllegalArgumentException e) {
-            // Criação do record ErrorResponseDTO
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), "Bad Request", Instant.now()));
         } catch (RuntimeException e) {
@@ -71,9 +60,8 @@ public class UsuarioController {
     @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<?> uploadProfilePicture(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         try {
-            // A URL/caminho da imagem será retornado pelo serviço
             String imageUrl = service.uploadProfilePicture(id, file);
-            return ResponseEntity.ok(imageUrl); // Retorna a URL da imagem salva
+            return ResponseEntity.ok(imageUrl);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), "Bad Request", Instant.now()));
@@ -85,12 +73,12 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')") // Apenas o próprio usuário pode se excluir ou um admin
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             service.deleteUser(id);
             return ResponseEntity.ok("Usuário excluído com sucesso.");
-        } catch (org.springframework.dao.EmptyResultDataAccessException e) { // Exceção específica para "não encontrado"
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDTO("Usuário não encontrado.", HttpStatus.NOT_FOUND.value(), "Not Found", Instant.now()));
         } catch (RuntimeException e) {
@@ -105,10 +93,10 @@ public class UsuarioController {
         try {
             UsuarioResponseDTO usuario = service.getById(id);
             return ResponseEntity.ok(usuario);
-        } catch (IllegalArgumentException e) { // Trata exceção se o ID for inválido
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), "Bad Request", Instant.now()));
-        } catch (NoSuchElementException e) { // Trata exceção se o usuário não for encontrado
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ErrorResponseDTO("Usuário não encontrado.", HttpStatus.NOT_FOUND.value(), "Not Found", Instant.now()));
         } catch (RuntimeException e) {
@@ -120,7 +108,7 @@ public class UsuarioController {
     @GetMapping("/check-email")
     public ResponseEntity<Map<String, Boolean>> checkEmailExists(@RequestParam String email) {
         logger.info("Requisição para check-email recebida para o email: {}", email);
-        boolean exists = service.findByEmail(email).isPresent(); // <-- LÓGICA RESTAURADA AQUI!
+        boolean exists = service.findByEmail(email).isPresent();
         Map<String, Boolean> response = new HashMap<>();
         response.put("exists", exists);
         return ResponseEntity.ok(response);

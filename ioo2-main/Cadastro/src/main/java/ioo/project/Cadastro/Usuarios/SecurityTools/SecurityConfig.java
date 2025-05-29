@@ -34,55 +34,40 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Corrigido para a sintaxe mais recente do Spring Security 6+
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Permite acesso público para o login e registro (APIs)
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // Permite acesso público ao endpoint de verificação de email
                         .requestMatchers("/api/usuarios/check-email").permitAll()
 
-                        // Permite acesso às páginas HTML e recursos estáticos
                         .requestMatchers(
                                 "/", "/index.html", "/conta.html", "/admin.html",
                                 "/css/**", "/js/**", "/images/**", "/uploads/**", "/favicon.ico"
                         ).permitAll()
 
-                        // APENAS ADMIN PODE ACESSAR AS APIS DE ADMIN
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // OU .hasAuthority("ROLE_ADMIN") dependendo do seu setup
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // Usuários e admins podem acessar as APIs de usuários
-                        // Isso significa que qualquer usuário autenticado (ROLE_USER ou ROLE_ADMIN) pode acessar /api/usuarios/**
-                        // A lógica de "usuário só acessa seus próprios dados" vs "admin acessa tudo" deve ser feita no Controller/Service.
-                        .requestMatchers("/api/usuarios/**").hasAnyRole("USER", "ADMIN") // OU .hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                        .requestMatchers("/api/usuarios/**").hasAnyRole("USER", "ADMIN")
 
-                        // Todas as outras requisições requerem autenticação
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Seu JWTFilter aqui
-        // .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler)) // Se tiver um handler de exceção
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(
-                // --- APENAS RECURSOS ESTÁTICOS QUE DEVEM SER TOTALMENTE IGNORADOS PELO SPRING SECURITY ---
-                // Se você tem arquivos HTML estáticos na raiz do seu frontend que são acessados diretamente
-                // sem autenticação, como uma página inicial (ex: index.html), você pode incluí-los aqui.
-                // Caso contrário, se são SPAs ou páginas que exigem login para serem exibidas,
-                // é melhor gerenciá-las no frontend ou com permitAll() no securityFilterChain.
-                "/", // Se sua rota raiz serve um index.html público
+                "/",
                 "/index.html",
-                "/conta.html", // Se conta.html for acessível a todos
-                "/admin-dashboard.html", // Se admin-dashboard.html for acessível a todos sem login
+                "/conta.html",
+                "/admin-dashboard.html",
                 "/css/**",
                 "/js/**",
                 "/images/**",
                 "/uploads/**",
                 "/favicon.ico"
-                // Remova quaisquer endpoints da API que você possa ter colocado aqui!
         );
     }
 
@@ -104,18 +89,12 @@ public class SecurityConfig implements WebMvcConfigurer {
         return config.getAuthenticationManager();
     }
 
-    @Override // Mantenha esta anotação
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Mapeia a URL /uploads/** para o diretório físico 'uploads/'
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + System.getProperty("user.dir") + "/uploads/");
-        // Garante que os recursos estáticos padrão (de src/main/resources/static) ainda são servidos
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
     }
-
-
-
-
 
 }

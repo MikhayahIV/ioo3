@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   const token = localStorage.getItem("jwtToken");
   let userId = localStorage.getItem("userId");
-  const userRole = localStorage.getItem("userRole"); // User role adicionado aqui!
+  const userRole = localStorage.getItem("userRole");
 
 console.log("Variáveis do localStorage no conta.js:");
   console.log("token:", token);
@@ -12,27 +12,22 @@ console.log("Variáveis do localStorage no conta.js:");
 
   let currentEmailOnLoad = '';
 
-  // --- Elementos Comuns e Lógica de Tema ---
+
   const themeButton = document.getElementById("themeSwitcher");
   if (themeButton) {
-    themeButton.addEventListener("click", toggleTheme); // Chama a função global de utils.js
+    themeButton.addEventListener("click", toggleTheme);
   } else {
     console.warn("Elemento 'themeSwitcher' não encontrado no DOM.");
   }
 
-  // A função toggleTheme é definida em utils.js, não aqui.
-  // REMOVA QUALQUER DEFINIÇÃO DE 'function toggleTheme() { ... }' DAQUI.
 
-  // --- Lógica de Toggle de Senha ---
-  setupPasswordToggle(); // Chama a função global de utils.js
+  setupPasswordToggle();
 
-  // --- Lógica de Login e Redirecionamento (Verificação Inicial) ---
-  // A verificação inicial agora inclui a role do usuário.
   if (!token || !userId || userId === "null" || userId === "undefined" || (userRole !== 'ROLE_USER' && userRole !== 'ROLE_ADMIN')) {
     alert("Você não está logado, sua sessão expirou ou não tem permissão para acessar esta página. Por favor, faça login.");
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("userId");
-    localStorage.removeItem("userRole"); // Remove userRole também
+    localStorage.removeItem("userRole");
     window.location.href = "index.html";
     return;
   }
@@ -59,23 +54,22 @@ console.log("Variáveis do localStorage no conta.js:");
      email: "Email",
      telefone: "Telefone",
      endereco: "Endereço",
-     dataNascimento: "Data de Nascimento", // Mapeamento adicionado
-     senhaAtual: "Senha Atual", // Adicionado para validação de senha
-     novaSenha: "Nova Senha", // Adicionado para validação de senha
-     confirmarNovaSenha: "Confirmar Nova Senha", // Adicionado para validação de senha
+     dataNascimento: "Data de Nascimento",
+     senhaAtual: "Senha Atual",
+     novaSenha: "Nova Senha",
+     confirmarNovaSenha: "Confirmar Nova Senha",
      genero: "Gênero"
    };
 
    function displayFormErrors(errorResponse, formId) {
      clearFormMessages();
      console.log("displayFormErrors recebido:", errorResponse, "para o formulário:", formId);
-
      const generalErrorElement = document.getElementById('profileEditError');
      let hasFieldErrors = false;
-     let detailedGeneralMessage = "Por favor, corrija os seguintes erros: \n"; // Inicia com uma mensagem mais específica
+     let detailedGeneralMessage = "Por favor, corrija os seguintes erros: \n";
 
-     // Exibe erros específicos por campo, se existirem (do GlobalExceptionHandler)
-     if (errorResponse.errors) { // Verifica se existe o mapa 'errors'
+
+     if (errorResponse.errors) {
        for (const fieldName in errorResponse.errors) {
          if (errorResponse.errors.hasOwnProperty(fieldName)) {
            hasFieldErrors = true;
@@ -84,32 +78,25 @@ console.log("Variáveis do localStorage no conta.js:");
            if (errorElement) {
              errorElement.textContent = errorResponse.errors[fieldName];
            }
-           // Usa o mapeamento para obter o nome amigável do campo
            const displayFieldName = fieldNameMap[fieldName] || capitalizeFirstLetter(fieldName);
            detailedGeneralMessage += `- ${displayFieldName}: ${errorResponse.errors[fieldName]}\n`;
          }
        }
      }
 
-     // Define a mensagem geral com base na existência de erros específicos
      if (generalErrorElement) {
        if (hasFieldErrors) {
-         // Se há erros de campo, a mensagem geral é a concatenação detalhada
          generalErrorElement.textContent = detailedGeneralMessage;
        } else if (errorResponse.message) {
-         // Se não há erros de campo, mas há uma mensagem geral do backend (ex: email já existe)
          generalErrorElement.textContent = errorResponse.message;
        } else if (typeof errorResponse === 'string') {
-         // Caso raro de resposta não-JSON (fallback)
          generalErrorElement.textContent = errorResponse;
        } else {
-         // Mensagem genérica se nada mais se aplicar
          generalErrorElement.textContent = "Ocorreu um erro inesperado ao atualizar o perfil.";
        }
      }
    }
 
-  // --- Elementos do Modal de Alteração de Senha ---
   const passwordModal = document.getElementById("passwordModal");
   const changePasswordButton = document.getElementById("changePasswordButton");
   const closePasswordModalButton = document.querySelector("#passwordModal .close-button");
@@ -120,7 +107,6 @@ console.log("Variáveis do localStorage no conta.js:");
   const newPasswordInput = document.getElementById("newPassword");
   const confirmNewPasswordInput = document.getElementById("confirmNewPassword");
 
-  // --- Elementos do Modal de Edição de Perfil ---
   const editProfileModal = document.getElementById("editProfileModal");
   const editProfileButton = document.getElementById("editProfileButton");
   const closeEditProfileModalButton = document.querySelector("#editProfileModal .close-button");
@@ -128,20 +114,18 @@ console.log("Variáveis do localStorage no conta.js:");
   const profileEditError = document.getElementById("profileEditError");
 
   const editNomeInput = document.getElementById("editNome");
-  const editSobrenomeInput = document.getElementById("editSobrenome"); // CORRIGIDO AQUI!
+  const editSobrenomeInput = document.getElementById("editSobrenome");
   const editEmailInput = document.getElementById("editEmail");
   const editTelefoneInput = document.getElementById("editTelefone");
   const editEnderecoInput = document.getElementById("editEndereco");
   const editDataNascimentoInput = document.getElementById("editDataNascimento");
   const editGeneroSelect = document.getElementById("editGenero");
 
-  // --- Elementos para Foto de Perfil e Exclusão ---
   const profilePictureInput = document.getElementById("profilePictureInput");
   const changePhotoButton = document.getElementById("changePhotoButton");
   const deleteAccountButton = document.getElementById("deleteAccountButton");
 
 
-  // --- Funções para o Modal de Senha ---
   function openPasswordModal() {
     if (passwordModal) {
        clearFormMessages();
@@ -159,7 +143,6 @@ console.log("Variáveis do localStorage no conta.js:");
     clearFormMessages();
   }
 
-  // --- Funções para o Modal de Edição de Perfil ---
   function openEditProfileModal(userData) {
     if (editProfileModal) {
       if (editNomeInput) editNomeInput.value = userData.nome || '';
@@ -191,7 +174,6 @@ console.log("Variáveis do localStorage no conta.js:");
     clearFormMessages();
   }
 
-  // --- Event Listeners para o Modal de Senha ---
   if (changePasswordButton) {
     changePasswordButton.addEventListener("click", openPasswordModal);
   }
@@ -200,7 +182,6 @@ console.log("Variáveis do localStorage no conta.js:");
   }
 
 
-  // --- Event Listeners para o Modal de Edição de Perfil ---
   if (editProfileButton) {
     editProfileButton.addEventListener("click", function() {
       fetchUserData().then(userData => {
@@ -216,12 +197,10 @@ console.log("Variáveis do localStorage no conta.js:");
 
 
 
-  // --- Lógica de Alteração de Senha ---
   if (changePasswordForm) {
       changePasswordForm.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        // Limpa todas as mensagens de erro específicas e gerais antes de novas validações
         document.getElementById('currentPasswordError').textContent = "";
         document.getElementById('newPasswordError').textContent = "";
         document.getElementById('confirmNewPasswordError').textContent = "";
@@ -233,7 +212,6 @@ console.log("Variáveis do localStorage no conta.js:");
 
         let hasFrontendErrors = false;
 
-        // Validações de frontend para senha
         if (!senhaAtual) {
             document.getElementById('currentPasswordError').textContent = "A senha atual não pode estar vazia.";
             hasFrontendErrors = true;
@@ -255,9 +233,8 @@ console.log("Variáveis do localStorage no conta.js:");
         }
 
         if (hasFrontendErrors) {
-            // Exibe uma mensagem geral se houver erros de frontend
             document.getElementById('passwordChangeError').textContent = "Por favor, corrija os erros nos campos de senha.";
-            return; // Interrompe a submissão se houver erros de frontend
+            return;
         }
 
         try {
@@ -280,13 +257,12 @@ console.log("Variáveis do localStorage no conta.js:");
                    const errorData = await response.json().catch(() => ({ message: "Erro desconhecido ao atualizar senha." }));
                    console.error("Erro ao atualizar senha:", response.status, errorData);
 
-                          // MODIFICAÇÃO AQUI: Trata a mensagem de erro geral do backend
-                   if (errorData.errors) { // Se houver erros específicos por campo (validação @Valid)
+                   if (errorData.errors) {
                           displayFormErrors(errorData, 'changePasswordForm');
-                   } else if (errorData.message) { // Se houver uma mensagem de erro geral (como "Senha atual incorreta.")
+                   } else if (errorData.message) {
                           document.getElementById('passwordChangeError').textContent = errorData.message;
                           console.log("Mensagem de erro geral da API definida:", errorData.message);
-                   } else { // Fallback para estrutura de erro inesperada
+                   } else {
                           document.getElementById('passwordChangeError').textContent = "Ocorreu um erro inesperado ao atualizar a senha.";
                           console.log("Mensagem de erro inesperado definida.");
                           }
@@ -298,7 +274,6 @@ console.log("Variáveis do localStorage no conta.js:");
       });
   }
 
-  // --- Lógica de Submissão do Formulário de Edição de Perfil ---
 if (editProfileForm) {
     editProfileForm.addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -313,7 +288,6 @@ if (editProfileForm) {
 
       clearFormMessages();
 
-      // Debug logs para verificar os valores antes da comparação
       console.log("Debug Email Check (antes do trim):");
       console.log("newEmail:", newEmail);
       console.log("currentEmailOnLoad:", currentEmailOnLoad);
@@ -321,15 +295,11 @@ if (editProfileForm) {
       console.log("newEmail !== currentEmailOnLoad:", newEmail !== currentEmailOnLoad);
       console.log("São iguais após trim?", newEmail.trim() === currentEmailOnLoad.trim());
 
-
-      // Validação de formato de email no frontend (primeira camada)
       if (newEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmail)) {
           displayFormErrors({ errors: { email: "Formato de email inválido. Ex: usuario@dominio.com" }, message: "Erro de validação." }, 'editProfileForm');
           return;
       }
 
-      // Validação de email duplicado (se o email foi alterado)
-      // Usar .trim() para remover espaços em branco e garantir comparação precisa
       if (newEmail.trim() && newEmail.trim() !== currentEmailOnLoad.trim()) {
           try {
               const checkEmailResponse = await fetch(`http://localhost:8080/api/usuarios/check-email?email=${encodeURIComponent(newEmail.trim())}`);
@@ -372,36 +342,25 @@ if (editProfileForm) {
           });
 
            if (response.ok) {
-                   const responseData = await response.json(); // Isso agora é PerfilAtualizadoResponse
-                   const updatedUser = responseData.usuario; // Os dados atualizados do usuário
-                   const newToken = responseData.token; // O NOVO token JWT
+                   const responseData = await response.json();
+                   const updatedUser = responseData.usuario;
+                   const newToken = responseData.token;
 
-                      // 1. ATUALIZAR O LOCALSTORAGE COM O NOVO TOKEN
                    localStorage.setItem('jwtToken', newToken);
 
-                      // 2. ATUALIZAR AS VARIÁVEIS GLOBAIS/MODULARES NO JAVASCRIPT
-                      // Se o email foi alterado, o ID do usuário não muda, mas se o token foi
-                      // gerado com base no email, o token precisa ser substituído.
-                      // A variável 'token' global também deve ser atualizada para futuras chamadas
-                   token = newToken; // Importante para que futuras chamadas usem o novo token
-                      // userId = updatedUser.id; // Raramente o ID muda, então esta linha geralmente não é necessária
-                      // userRole = updatedUser.role; // Atualize a role se ela puder mudar via este endpoint
+                   token = newToken;
 
-                   alert("Perfil atualizado com sucesso!"); // A mensagem de sucesso do próprio fluxo
+
+                   alert("Perfil atualizado com sucesso!");
                    closeEditProfileModal();
 
-                      // 3. RECARRERGAR OS DADOS NA INTERFACE DO USUÁRIO
-                      // fetchUserData() vai agora usar o NOVO token e o userId correto
-                   fetchUserData(); // Esta função vai recarregar os dados na tela
+                   fetchUserData();
 
           } else {
-                      // ... lógica de erro se a atualização falhar ...
               const errorData = await response.json().catch(() => ({ message: "Erro desconhecido ao atualizar perfil." }));
               console.error("Erro ao atualizar perfil:", response.status, errorData);
               isplayFormErrors(errorData, 'editProfileForm');
 
-                      // Se o erro foi 401 ou 403 na TENTATIVA DE ATUALIZAÇÃO,
-                      // então a sessão REALMENTE expirou/não tem permissão, e aí sim você desloga.
                   if (response.status === 401 || response.status === 403) {
                        let("Sua sessão expirou ou você não tem permissão para atualizar o perfil. Faça login novamente.");
                        localStorage.removeItem("jwtToken");
@@ -417,19 +376,18 @@ if (editProfileForm) {
     });
   }
 
-   // --- Lógica de Carregamento de Dados do Usuário ---
    function fetchUserData() {
      console.log("Fetching user data for userId:", userId);
      console.log("Type of userId:", typeof userId);
      console.log("Value of userId:", userId);
-     console.log("User Role:", userRole); // Log do userRole
+     console.log("User Role:", userRole);
 
      if (!userId || isNaN(Number(userId))) {
          console.error("userId inválido ou ausente para fetchUserData:", userId);
          alert("ID de usuário inválido. Por favor, faça login novamente.");
          localStorage.removeItem("jwtToken");
          localStorage.removeItem("userId");
-         localStorage.removeItem("userRole"); // Remove userRole
+         localStorage.removeItem("userRole");
          window.location.href = "index.html";
          return Promise.reject("ID de usuário inválido.");
      }
@@ -446,7 +404,7 @@ if (editProfileForm) {
          alert("Sua sessão expirou ou você não tem permissão. Faça login novamente.");
          localStorage.removeItem("jwtToken");
          localStorage.removeItem("userId");
-         localStorage.removeItem("userRole"); // Remove userRole
+         localStorage.removeItem("userRole");
          window.location.href = "index.html";
          return Promise.reject("Sessão expirada/não autorizada");
        }
@@ -465,7 +423,6 @@ if (editProfileForm) {
 
        const userEmailElem = document.getElementById("userEmail");
        if (userEmailElem) userEmailElem.innerText = userData.email || 'N/A';
-       // Armazena o email original, removendo espaços em branco
        currentEmailOnLoad = userData.email ? userData.email.trim() : '';
 
        const userTelefoneElem = document.getElementById("userTelefone");
@@ -478,7 +435,7 @@ if (editProfileForm) {
        if (userDataNascimentoElem) {
          if (userData.dataNascimento) {
            const date = new Date(userData.dataNascimento);
-           userDataNascimentoElem.innerText = date.toLocaleDateString('pt-BR'); // Formata para DD/MM/AAAA
+           userDataNascimentoElem.innerText = date.toLocaleDateString('pt-BR');
          } else {
            userDataNascimentoElem.innerText = 'N/A';
          }
@@ -506,19 +463,17 @@ if (editProfileForm) {
 
    fetchUserData();
 
-  // --- Lógica de Logout ---
   const logoutButton = document.getElementById("logoutButton");
   if (logoutButton) {
     logoutButton.addEventListener("click", function() {
       localStorage.removeItem("jwtToken");
       localStorage.removeItem("userId");
-      localStorage.removeItem("userRole"); // Remover a role também
+      localStorage.removeItem("userRole");
       alert("Você foi desconectado.");
       window.location.href = "index.html";
     });
   }
 
-  // --- Lógica para Alterar Foto de Perfil ---
   if (changePhotoButton && profilePictureInput) {
     changePhotoButton.addEventListener("click", function() {
       profilePictureInput.click();
@@ -552,12 +507,12 @@ if (editProfileForm) {
     })
     .then(imageUrl => {
       alert("Foto de perfil atualizada com sucesso!");
-      console.log("URL da imagem recebida do backend:", imageUrl); // NOVO LOG
+      console.log("URL da imagem recebida do backend:", imageUrl);
       const profilePhotoElement = document.getElementById("profilePhoto");
       if (profilePhotoElement) {
         profilePhotoElement.src = imageUrl;
       }
-      fetchUserData(); // Re-carrega os dados para garantir que a URL da foto seja atualizada
+      fetchUserData();
     })
     .catch(error => {
       console.error("Erro ao fazer upload da foto:", error);
@@ -565,7 +520,6 @@ if (editProfileForm) {
     });
   }
 
-  // --- Lógica para Excluir Usuário ---
   if (deleteAccountButton) {
     deleteAccountButton.addEventListener("click", function() {
       if (confirm("Tem certeza que deseja excluir sua conta? Esta ação é irreversível.")) {
@@ -586,7 +540,7 @@ if (editProfileForm) {
         alert("Sua conta foi excluída com sucesso.");
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("userId");
-        localStorage.removeItem("userRole"); // Remove userRole
+        localStorage.removeItem("userRole");
         window.location.href = "index.html";
       } else {
         return response.text().then(text => { throw new Error(text) });
@@ -599,7 +553,6 @@ if (editProfileForm) {
   }
 });
 
-// Este window.onload deve estar FORA do DOMContentLoaded para não ser sobrescrito
 window.onload = () => {
   if (document.body) {
     document.body.classList.add("light");

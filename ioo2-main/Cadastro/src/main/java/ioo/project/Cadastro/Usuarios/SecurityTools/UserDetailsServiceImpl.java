@@ -24,12 +24,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UsuariosModel usuario = repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        String roleFromDatabase = usuario.getRole().name(); // Pegue a role diretamente do seu modelo UsuarioModel
+        String roleFromDatabase = usuario.getRole().name();
 
         return User.builder()
                 .username(usuario.getEmail())
                 .password(usuario.getSenha())
-                .authorities(Collections.singletonList(new SimpleGrantedAuthority(roleFromDatabase))) // Use .authorities()
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(roleFromDatabase)))
                 .build();
     }
 }

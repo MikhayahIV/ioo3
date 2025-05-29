@@ -29,8 +29,6 @@ public class AdminService {
     private BCryptPasswordEncoder passwordEncoder;
 
 
-
-    // Métodos auxiliares para conversão de DTO (mantidos)
     private UsuarioResponseDTO toResponseDTO(UsuariosModel usuario) {
         return new UsuarioResponseDTO(
                 usuario.getId(),
@@ -47,7 +45,6 @@ public class AdminService {
         );
     }
 
-    // --- Operações CRUD existentes (mantidas) ---
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<UsuarioResponseDTO> getAllUsers() {
@@ -88,13 +85,10 @@ public class AdminService {
         Optional.ofNullable(dto.nome()).ifPresent(usuario::setNome);
         Optional.ofNullable(dto.sobrenome()).ifPresent(usuario::setSobrenome);
         Optional.ofNullable(dto.email()).ifPresent(usuario::setEmail);
-        // Não atualizar senha aqui. Ela será tratada pelo método específico de senha.
         Optional.ofNullable(dto.telefone()).ifPresent(usuario::setTelefone);
         Optional.ofNullable(dto.endereco()).ifPresent(usuario::setEndereco);
         Optional.ofNullable(dto.dataNascimento()).ifPresent(usuario::setDataNascimento);
         Optional.ofNullable(dto.genero()).ifPresent(usuario::setGenero);
-        // Opcional: Se o admin pode alterar a role via PUT geral, você pode adicionar aqui
-        // Optional.ofNullable(dto.getRole()).ifPresent(usuario::setRole);
 
         UsuariosModel updatedUser = usuariosRepository.save(usuario);
         return toResponseDTO(updatedUser);
@@ -109,7 +103,6 @@ public class AdminService {
     }
 
 
-    // NOVO MÉTODO: Alterar a senha de qualquer usuário por um admin
     @PreAuthorize("hasRole('ADMIN')")
     public UsuarioResponseDTO updateUserPassword(Long userId, SenhaUpdateDTO passwordDto) {
         if (passwordDto.novaSenha() == null || passwordDto.novaSenha().isEmpty()) {

@@ -1,8 +1,3 @@
-// Este arquivo é o seu script.js, que contém as funções login() e register().
-
-// Certifique-se de que as funções toggleTheme e setupPasswordToggle
-// estão definidas em um arquivo utils.js que é carregado ANTES deste script no HTML.
-
 function toggleForms() {
   const login = document.getElementById("login-form");
   const register = document.getElementById("register-form");
@@ -14,7 +9,7 @@ function clearAllErrors() {
     document.querySelectorAll('.error-message').forEach(p => {
         p.textContent = '';
     });
-    // Limpa erros gerais
+
     const loginErrorElement = document.getElementById("loginError");
     if (loginErrorElement) loginErrorElement.textContent = '';
     const registerErrorElement = document.getElementById("registerError");
@@ -22,21 +17,17 @@ function clearAllErrors() {
 }
 
 function displayErrors(errors, formId) {
-    clearAllErrors(); // Limpa todos os erros antes de exibir novos
+    clearAllErrors();
 
     for (const fieldName in errors) {
         if (errors.hasOwnProperty(fieldName)) {
-            // Constrói o ID do elemento p de erro. Ex: 'regEmailError' para o campo 'email'
-            // ou 'loginEmailError' para o campo 'email' no formulário de login
             const errorElementId = formId === 'login-form' ? `login${capitalizeFirstLetter(fieldName)}Error` : `reg${capitalizeFirstLetter(fieldName)}Error`;
             const errorElement = document.getElementById(errorElementId);
             if (errorElement) {
                 errorElement.textContent = errors[fieldName];
             } else {
-                // Se não encontrar um p específico (por exemplo, erro global ou de campo não mapeado)
                 const generalErrorElement = document.getElementById(`${formId === 'login-form' ? 'loginError' : 'registerError'}`);
                 if (generalErrorElement) {
-                     // Adiciona a mensagem, pode ser útil para erros que não mapeiam para campos específicos
                      generalErrorElement.textContent += (generalErrorElement.textContent ? '\n' : '') + errors[fieldName];
                 } else {
                     console.warn(`Elemento de erro para '${errorElementId}' ou erro geral para '${formId}' não encontrado.`);
@@ -46,14 +37,12 @@ function displayErrors(errors, formId) {
     }
 }
 
-
-// Função auxiliar para capitalizar a primeira letra (útil para IDs de elementos)
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 async function login() {
-  clearAllErrors(); // Limpa todos os erros antes de uma nova tentativa de login
+  clearAllErrors();
 
   const email = document.getElementById("loginEmail").value;
   const senha = document.getElementById("loginSenha").value;
@@ -69,34 +58,25 @@ async function login() {
     if (res.ok) {
       const data = await res.json();
       if (data.token) {
-        // --- ADIÇÃO CRÍTICA AQUI ---
-        // 1. Armazenar o token JWT
         localStorage.setItem('jwtToken', data.token);
-        // 2. Armazenar o ID do usuário (já estava)
         localStorage.setItem('userId', data.id);
-        // 3. Armazenar a ROLE do usuário (NOVA ADIÇÃO)
-        localStorage.setItem('userRole', data.role); // Assumindo que 'data.role' contém a string da role (ex: "ADMIN", "USER")
-        // --- FIM DA ADIÇÃO CRÍTICA ---
-
+        localStorage.setItem('userRole', data.role);
         alert("Login bem-sucedido! Bem-vindo, " + (data.nome || 'usuário'));
 
-        // --- LÓGICA DE REDIRECIONAMENTO BASEADA NA ROLE (NOVA ADIÇÃO) ---
         if (data.role === 'ROLE_ADMIN') {
-          window.location.href = "admin.html"; // Redireciona para a tela de admin
-       } else if (data.role === 'ROLE_USER') { // <--- Boa prática adicionar a verificação explícita para USER também
+          window.location.href = "admin.html";
+       } else if (data.role === 'ROLE_USER') {
           window.location.href = "conta.html";
         } else {
-          // Caso a role não seja reconhecida ou seja algo inesperado
           console.warn("Role de usuário desconhecida:", data.role);
-          localStorage.clear(); // Limpa as credenciais por segurança
+          localStorage.clear();
           loginErrorElement.textContent = "Role de usuário inválida. Por favor, entre em contato com o suporte.";
         }
-        // --- FIM DA LÓGICA DE REDIRECIONAMENTO ---
 
       } else {
         console.error("Login bem-sucedido, mas o token não foi recebido:", data);
         alert("Login bem-sucedido, mas o token não foi recebido. Tente novamente.");
-        window.location.href = "index.html"; // Redireciona para o login
+        window.location.href = "index.html";
       }
     } else {
       console.error("Resposta do backend não OK no login:", res);
@@ -133,7 +113,7 @@ async function login() {
 }
 
 
-async function register() { // FUNÇÃO AGORA É ASYNC
+async function register() {
   const nome = document.getElementById("regNome").value;
   const sobrenome = document.getElementById("regSobrenome").value;
   const email = document.getElementById("regEmail").value;
@@ -143,11 +123,10 @@ async function register() { // FUNÇÃO AGORA É ASYNC
   const endereco = document.getElementById("regEndereco").value;
   const dataNascimento = document.getElementById("regNascimento").value;
   const generoinput = document.getElementById("regGenero").value;
-  const genero = generoinput ? generoinput.toUpperCase() : null; // Garante que é null se não selecionado
+  const genero = generoinput ? generoinput.toUpperCase() : null;
 
-  clearAllErrors(); // Limpa mensagens de erro anteriores de todos os campos
+  clearAllErrors();
 
-  // 1. Validações básicas do lado do cliente (sincronas)
   if (senha !== senhaConfirm) {
     document.getElementById("regSenhaConfirmError").innerText = "As senhas não coincidem.";
     return;
@@ -157,12 +136,11 @@ async function register() { // FUNÇÃO AGORA É ASYNC
     return;
   }
   const regEmailErrorElement = document.getElementById("regEmailError");
-  if (!email) { // Verifica se o campo de email está vazio
+  if (!email) {
       regEmailErrorElement.innerText = "O campo de e-mail não pode ser vazio.";
       return;
   }
 
-  // 2. Verificação de email existente (assíncrona)
   try {
     const checkEmailResponse = await fetch(`http://localhost:8080/api/usuarios/check-email?email=${encodeURIComponent(email)}`);
 
@@ -185,7 +163,6 @@ async function register() { // FUNÇÃO AGORA É ASYNC
     return;
   }
 
-  // 3. Se todas as validações anteriores passaram, prossegue com o cadastro principal
   const userData = {
       nome, sobrenome, email, senha, telefone, endereco, dataNascimento, genero
   };
@@ -202,12 +179,9 @@ async function register() { // FUNÇÃO AGORA É ASYNC
       if (data.token) {
         localStorage.setItem('jwtToken', data.token);
         localStorage.setItem('userId', data.id);
-        // --- NOVA ADIÇÃO AQUI ---
-        // Salva a role do usuário no localStorage
-        localStorage.setItem('userRole', data.role); // Assumindo que 'data.role' contém a string da role
-        // --- FIM DA NOVA ADIÇÃO ---
+        localStorage.setItem('userRole', data.role);
         alert("Cadastro e Login bem-sucedidos! Bem-vindo, " + (data.nome || 'usuário'));
-        window.location.href = "conta.html"; // Redireciona para conta.html
+        window.location.href = "conta.html";
       } else {
         console.error("Token não recebido na resposta de registro:", data);
         alert("Cadastro bem-sucedido, mas o token não foi recebido. Faça login manualmente.");
@@ -234,25 +208,23 @@ async function register() { // FUNÇÃO AGORA É ASYNC
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  // As funções toggleTheme e setupPasswordToggle devem ser definidas globalmente em utils.js
-  // e utils.js deve ser carregado ANTES deste script no HTML.
+
 
   const themeButton = document.getElementById("themeSwitcher");
-  if (themeButton && typeof toggleTheme === 'function') { // Verifica se toggleTheme existe
+  if (themeButton && typeof toggleTheme === 'function') {
     themeButton.addEventListener("click", toggleTheme);
   } else if (themeButton) {
     console.warn("Elemento 'themeSwitcher' encontrado, mas a função 'toggleTheme' não está disponível.");
   }
 
-  if (typeof setupPasswordToggle === 'function') { // Verifica se setupPasswordToggle existe
+  if (typeof setupPasswordToggle === 'function') {
     setupPasswordToggle();
   } else {
     console.warn("A função 'setupPasswordToggle' não está disponível.");
   }
 });
 
-// Este window.onload deve estar FORA do DOMContentLoaded para não ser sobrescrito
-// e deve ser o único window.onload ou usar addEventListener para não sobrescrever
+
 window.onload = () => {
   if (document.body) {
     document.body.classList.add("light");

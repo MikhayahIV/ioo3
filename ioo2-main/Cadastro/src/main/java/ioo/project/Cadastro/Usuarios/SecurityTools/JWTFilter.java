@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory; // Importe o LoggerFactory
 @Component
 public class JWTFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class); // Inicialize o Logger
+    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
 
     private final JWTUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
@@ -43,23 +43,16 @@ public class JWTFilter extends OncePerRequestFilter {
             jwt = authorizationHeader.substring(7);
             try {
                 email = jwtUtil.extractUsername(jwt);
-                logger.info("Email extraído do token JWT: {}", email); // LOG CRÍTICO AQUI!
+                logger.info("Email extraído do token JWT: {}", email);
             } catch (Exception e) {
-                // Logar o erro se a extração do email falhar (token inválido, etc.)
                 logger.error("Erro ao extrair email do token JWT: {}", e.getMessage());
             }
         }
 
-        // Se o email foi extraído e não há autenticação no contexto de segurança
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
-                // Tenta carregar os detalhes do usuário
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-
-                // Valida o token contra os detalhes do usuário
-                // Se jwtUtil.isValid(jwt) não verifica a expiração, considere usar jwtUtil.validateToken(jwt, userDetails)
-                // Assumindo que jwtUtil.isValid(jwt) é suficiente por enquanto.
-                if (jwtUtil.isValid(jwt)) { // Ou jwtUtil.validateToken(jwt, userDetails)
+                if (jwtUtil.isValid(jwt)) {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(
@@ -71,10 +64,8 @@ public class JWTFilter extends OncePerRequestFilter {
                     logger.warn("Token JWT inválido para o usuário '{}'.", email);
                 }
             } catch (UsernameNotFoundException e) {
-                // Captura especificamente quando o usuário não é encontrado
                 logger.warn("Usuário não encontrado no banco de dados para o email no token: {}", email);
             } catch (Exception e) {
-                // Captura outras exceções durante o processo de autenticação JWT
                 logger.error("Erro inesperado durante a validação ou autenticação do token JWT: {}", e.getMessage(), e);
             }
         }
@@ -84,9 +75,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        // Este método é crucial! Ele decide se o filtro deve ser aplicado ou não.
-        // Se ele retornar TRUE para /api/auth/registrar, o JWTFilter não será executado.
-        // Isso é o que você quer para o registro, pois não há token JWT ainda.
         return request.getRequestURI().startsWith("/api/auth/registrar") ||
                 request.getRequestURI().startsWith("/api/auth/login") ||
                 request.getRequestURI().startsWith("/api/usuarios/check-email");

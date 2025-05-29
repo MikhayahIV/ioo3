@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/admin")
-@PreAuthorize("hasRole('ADMIN')") // Garante que todos os métodos aqui exigem ROLE_ADMIN
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final AdminService adminService;
@@ -27,7 +27,6 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    // --- Métodos CRUD existentes (mantidos, sem alterações aqui) ---
 
     @GetMapping("/usuarios")
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsers() {
@@ -101,11 +100,7 @@ public class AdminController {
         }
     }
 
-
-
-    // NOVO ENDPOINT: Alterar a senha de qualquer usuário por um admin
-    // Usando PATCH para atualização parcial de um sub-recurso específico para senha
-    @PatchMapping("/users/{id}/password") // ESTE É O ENDPOINT DA SENHA
+    @PatchMapping("/users/{id}/password")
     public ResponseEntity<?> updateUserPassword(@PathVariable Long id, @RequestBody @Valid SenhaUpdateDTO passwordDto) {
         try {
             UsuarioResponseDTO updatedUser = adminService.updateUserPassword(id, passwordDto);
